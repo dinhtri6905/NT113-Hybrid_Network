@@ -19,13 +19,13 @@ resource "aws_security_group" "ec2_sg" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/8"] 
+    cidr_blocks = ["0.0.0.0/0"] 
   }
   ingress {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/8"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   # Cổng 22 cho Ansible (SSH)
@@ -60,16 +60,48 @@ data "aws_ami" "ubuntu" {
 resource "aws_instance" "web_ehr" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t3.micro"
+  key_name      = aws_key_pair.deployer.key_name 
   
-  key_name      = aws_key_pair.deployer.key_name # Gắn chìa khóa vào máy
-  subnet_id     = module.vinhealth_vpc.private_subnet_id
-  vpc_security_group_ids = [aws_security_group.ec2_sg.id]
+  # 1. Chuyển nhà ra Public Subnet (Cloud DMZ)
+  subnet_id                   = module.vinhealth_vpc.public_subnet_id
+  vpc_security_group_ids      = [aws_security_group.ec2_sg.id]
+  
+  # 2. Cấp 1 IP Public thật để bạn dùng trình duyệt truy cập
+  associate_public_ip_address = true
 
-  # ĐÃ XÓA user_data - Bây giờ Ansible sẽ lo phần cài đặt Nginx
-  
-  tags = { Name = "VinHealth-EHR-Web-Server" }
+  # 3. Code cài Nginx, tạo Web và tự động lấy chứng chỉ HTTPS miễn phí
+  user_data = <<-EOF
+              #!/bin/bash
+              # 1. Cài đặt các gói cần thiết
+              apt-get update -y
+              apt-get install nginx certbot python3-certbot-nginx -y
+
+              # 2. Tạo trang Web Patient Portal
+              echo "<div style='text-align:center; margin-top:50px;'>
+                      <h1>VINHEALTH EHR PATIENT PORTAL</h1>
+                      <p>He thong dang chay tren Vung DMZ (AWS Public Cloud)</p>
+                      <p style='color:green;'>Trang web da duoc bao mat bang HTTPS/SSL</p>
+                    </div>" > /var/www/html/index.html
+
+              # 3. Lấy IP Public của chính máy ảo này bằng lệnh curl
+              PUBLIC_IP=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)
+              
+              # 4. Tạo tên miền miễn phí với nip.io
+              DOMAIN="$PUBLIC_IP.nip.io"
+
+              # 5. Cấu hình Nginx nhận diện tên miền này
+              sed -i "s/server_name _;/server_name $DOMAIN;/g" /etc/nginx/sites-available/default
+              systemctl restart nginx
+
+              # 6. Dùng Certbot tự động xin chứng chỉ HTTPS từ Let's Encrypt (Bỏ qua prompt)
+              certbot --nginx -d $DOMAIN --non-interactive --agree-tos -m admin@$DOMAIN --redirect
+
+              # Khởi động lại dịch vụ
+              systemctl restart nginx
+              EOF
+
+  tags = { Name = "VinHealth-EHR-Web-Server-DMZ" }
 }
-
 # ==================================================
 # 4. KHO LƯU TRỮ S3 (DICOM)
 # ==================================================

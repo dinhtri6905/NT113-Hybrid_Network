@@ -12,3 +12,7 @@ output "aws_vpn_connection_id" {
   description = "GỬI ID NÀY CHO TV3: ID của kết nối VPN Site-to-Site"
   value       = module.vinhealth_vpc.vpn_connection_id
 }
+
+output "web_public_ip" {
+  value = aws_instance.web_ehr.public_ip
+}
