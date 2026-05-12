@@ -1,0 +1,12 @@
+---
+vlans:
+  - { id: 20, name: "A-1-STAFF" }
+  - { id: 21, name: "A-1-DEVICES" }
+  - { id: 22, name: "A-1-CCTV" }
+
+access_ports:
+  - { interface: "Ethernet0/0", vlan: 20, desc: "PC-BacSi-ICU" }
+  - { interface: "Ethernet0/1", vlan: 21, desc: "May-Tro-Tho-IoT" }
+  - { interface: "Ethernet0/2", vlan: 22, desc: "Camera-PhongMo" }
+
+uplink_port: "Ethernet1/0"

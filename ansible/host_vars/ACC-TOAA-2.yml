@@ -1,0 +1,12 @@
+---
+vlans:
+  - { id: 30, name: "A-2-STAFF" }
+  - { id: 31, name: "A-2-DICOM" }
+  - { id: 32, name: "A-2-CCTV" }
+
+access_ports:
+  - { interface: "Ethernet0/0", vlan: 30, desc: "PC-BacSi-XQuang" }
+  - { interface: "Ethernet0/1", vlan: 31, desc: "May-Chup-MRI" }
+  - { interface: "Ethernet0/2", vlan: 32, desc: "Camera-HanhLang" }
+
+uplink_port: "Ethernet1/0"

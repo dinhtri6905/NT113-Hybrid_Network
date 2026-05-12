@@ -1,0 +1,39 @@
+---
+- name: TỰ ĐỘNG HÓA TẠO VLAN VÀ GÁN PORT (ON-PREMISE)
+  hosts: access_switches
+  gather_facts: no
+
+  tasks:
+    - name: 1. Tạo hàng loạt VLAN và đặt tên (VLAN 10-99)
+      cisco.ios.ios_config:
+        lines:
+          - name {{ item.name }}
+        parents: vlan {{ item.id }}
+      loop: "{{ vlans }}"
+      when: vlans is defined
+
+    - name: 2. Cấu hình cổng Trunking (Uplink lên Distribution)
+      cisco.ios.ios_config:
+        lines:
+          - description UPLINK-TO-DISTRIBUTION
+          - switchport trunk encapsulation dot1q
+          - switchport mode trunk
+          - switchport trunk allowed vlan 10-99
+      parents: interface {{ uplink_port }}
+      when: uplink_port is defined
+
+    - name: 3. Gán Port vào từng VLAN (Access Mode) và bật PortFast
+      cisco.ios.ios_config:
+        lines:
+          - description {{ item.desc }}
+          - switchport mode access
+          - switchport access vlan {{ item.vlan }}
+          - spanning-tree portfast
+          - no shutdown
+      parents: interface {{ item.interface }}
+      loop: "{{ access_ports }}"
+      when: access_ports is defined
+
+    - name: 4. Lưu cấu hình (Write Memory)
+      cisco.ios.ios_config:
+        save_when: modified

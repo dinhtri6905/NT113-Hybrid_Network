@@ -1,0 +1,10 @@
+---
+vlans:
+  - { id: 102, name: "E-2-HR-STAFF" }
+  - { id: 105, name: "E-2-CCTV" }
+
+access_ports:
+  - { interface: "Ethernet0/0", vlan: 102, desc: "PC-NhanSu" }
+  - { interface: "Ethernet0/1", vlan: 105, desc: "Camera-PhongNhanSu" }
+
+uplink_port: "Ethernet1/0"
