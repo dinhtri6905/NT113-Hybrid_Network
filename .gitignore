@@ -1,0 +1,9 @@
+# State files 
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+
+
+# Thư mục .terraform
+.terraform/
+.terraform.tfstate
