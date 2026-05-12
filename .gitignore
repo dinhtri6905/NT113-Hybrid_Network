@@ -7,3 +7,5 @@
 # Thư mục .terraform
 .terraform/
 .terraform.tfstate
+
+vinhealth_key*

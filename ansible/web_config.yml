@@ -1,0 +1,75 @@
+---
+- name: Cau hinh Web Server EHR cho Benh vien VinHealth
+  hosts: web_servers
+  become: yes  
+  
+  tasks:
+    - name: Cap nhat cache apt
+      apt:
+        update_cache: yes
+        force_apt_get: yes
+
+    - name: Cai dat Nginx phien ban moi nhat
+      apt:
+        name: nginx
+        state: present
+
+    - name: Tao thu muc chua code Web (neu chua co)
+      file:
+        path: /var/www/vinhealth
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: '0755'
+
+    - name: Day file giao dien Patient Portal vao EC2
+      copy:
+        content: |
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>VinHealth Patient Portal</title>
+              <style>
+                  body { font-family: Arial; text-align: center; background: #f0f8ff; }
+                  .container { border: 2px solid #007bff; padding: 20px; margin-top: 100px; border-radius: 15px; }
+              </style>
+          </head>
+          <body>
+              <div class="container">
+                  <h1>VINHEALTH EHR PATIENT PORTAL</h1>
+                  <p>Hệ thống đang hoạt động trên nền tảng <b>Hybrid Cloud</b></p>
+                  <p>Trạng thái kết nối: <span style="color: green;">Bảo mật qua VPN</span></p>
+              </div>
+          </body>
+          </html>
+        dest: /var/www/vinhealth/index.html
+
+    - name: Cau hinh Nginx trỏ vao thu muc moi
+      copy:
+        content: |
+          server {
+              listen 80;
+              root /var/www/vinhealth;
+              index index.html;
+              location / {
+                  try_files $uri $uri/ =404;
+              }
+          }
+        dest: /etc/nginx/sites-available/vinhealth
+
+    - name: Kich hoat cau hinh moi va xoa mac dinh
+      file:
+        src: /etc/nginx/sites-available/vinhealth
+        dest: /etc/nginx/sites-enabled/vinhealth
+        state: link
+
+    - name: Xoa file cau hinh mac dinh cua Nginx
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+
+    - name: Khoi dong lai Nginx de ap dung thay doi
+      service:
+        name: nginx
+        state: restarted
+        enabled: yes
