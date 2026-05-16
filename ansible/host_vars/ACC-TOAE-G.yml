@@ -1,0 +1,10 @@
+---
+vlans:
+  - { id: 82, name: "E-G-EXECUTIVE-STAFF" }
+  - { id: 85, name: "E-G-CCTV" }
+
+access_ports:
+  - { interface: "Ethernet0/0", vlan: 82, desc: "PC-GiamDoc" }
+  - { interface: "Ethernet0/1", vlan: 85, desc: "Camera-SanE" }
+
+uplink_port: "Ethernet1/0"

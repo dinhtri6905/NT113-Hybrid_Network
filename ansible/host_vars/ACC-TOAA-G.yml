@@ -1,0 +1,14 @@
+---
+vlans:
+  - { id: 10, name: "A-G-STAFF" }
+  - { id: 11, name: "A-G-PATIENT-WIFI" }
+  - { id: 12, name: "A-G-DEVICES" }
+  - { id: 13, name: "A-G-CCTV" }
+
+access_ports:
+  - { interface: "Ethernet0/0", vlan: 10, desc: "PC-TiepNhan" }
+  - { interface: "Ethernet0/1", vlan: 11, desc: "AP-Wifi-Guest" }
+  - { interface: "Ethernet0/2", vlan: 12, desc: "Medical-Kiosk" }
+  - { interface: "Ethernet0/3", vlan: 13, desc: "Camera-Lobby" }
+
+uplink_port: "Ethernet1/0"

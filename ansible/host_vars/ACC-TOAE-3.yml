@@ -1,0 +1,10 @@
+---
+vlans:
+  - { id: 112, name: "E-3-IT-STAFF" }
+  - { id: 115, name: "E-3-CCTV" }
+
+access_ports:
+  - { interface: "Ethernet0/0", vlan: 112, desc: "PC-Admin-IT" }
+  - { interface: "Ethernet0/1", vlan: 115, desc: "Camera-ServerRoom" }
+
+uplink_port: "Ethernet1/0"

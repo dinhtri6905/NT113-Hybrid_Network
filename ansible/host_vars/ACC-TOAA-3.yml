@@ -1,0 +1,12 @@
+---
+vlans:
+  - { id: 40, name: "A-3-STAFF" }
+  - { id: 41, name: "A-3-PATIENT-WIFI" }
+  - { id: 42, name: "A-3-CCTV" }
+
+access_ports:
+  - { interface: "Ethernet0/0", vlan: 40, desc: "PC-KhamBenh" }
+  - { interface: "Ethernet0/1", vlan: 41, desc: "AP-Wifi-KhuCho" }
+  - { interface: "Ethernet0/2", vlan: 42, desc: "Camera-KhuKham" }
+
+uplink_port: "Ethernet1/0"
