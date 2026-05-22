@@ -1040,7 +1040,7 @@ interface Ethernet0/0
  no shutdown
 !
 ! ===== DOWNLINK TRUNK XUỐNG FLOOR SWITCHES =====
-! [SỬA] GigabitEthernet0/2 → Ethernet3/2 (Floor1 = SAT_FloorG)
+! [SỬA] GigabitEthernet0/2 → Ethernet3/2
 interface Ethernet3/2
  description TO_SAT_FloorG [Tầng G - Tiếp nhận]
  switchport mode trunk
