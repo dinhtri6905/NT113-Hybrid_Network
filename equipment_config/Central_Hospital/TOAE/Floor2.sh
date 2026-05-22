@@ -8,13 +8,6 @@ vtp mode client
 vtp domain VINHEALTH
 vtp password VinHealth2024
 !
-vlan 102
- name E-2-HR-STAFF
-vlan 105
- name E-2-CCTV
-vlan 106
- name E-2-MANAGEMENT
-!
 interface Vlan106
  description MANAGEMENT
  ip address 10.10.60.1 255.255.255.248
@@ -81,7 +74,7 @@ line vty 0 4
 ip ssh version 2
 crypto key generate rsa modulus 2048
 !
-ntp server 10.100.33.10
+ntp server 10.100.33.1
 logging host 10.100.32.10
 logging trap informational
 snmp-server community VinHealth_RO RO

@@ -1,7 +1,7 @@
 ### 11.5 Floor 3 – MDF Satellite (Tầng 2 – Server Room)
-
-```
 hostname SAT-MDF-SW-01
+!
+spanning-tree mode rapid-pvst
 !
 vlan 220
  name SAT-2-SERVER-ROOM
@@ -10,12 +10,15 @@ vlan 221
 vlan 223
  name SAT-2-CCTV
 !
-interface GigabitEthernet0/1
+interface Ethernet0/0
+ description TRUNK-TO-SWL3_Clinic
+ switchport trunk encapsulation dot1q
  switchport mode trunk
- switchport trunk allowed vlan 220,221,223
+ switchport trunk allowed vlan 220,221,222,223
+ spanning-tree portfast trunk
  no shutdown
 !
-interface range GigabitEthernet0/2 - 8
+interface Ethernet2/0
  description SERVER_ROOM_EQUIPMENT
  switchport mode access
  switchport access vlan 220
@@ -23,11 +26,12 @@ interface range GigabitEthernet0/2 - 8
  spanning-tree bpduguard enable
  no shutdown
 !
-interface range GigabitEthernet0/9 - 12
+interface Ethernet2/1
  description CCTV_MDF
  switchport mode access
  switchport access vlan 223
  spanning-tree portfast
+ spanning-tree bpduguard enable
  no shutdown
 !
 interface Vlan220
@@ -36,3 +40,4 @@ interface Vlan220
 !
 ip default-gateway 10.2.40.126
 end
+write memory

@@ -1,21 +1,16 @@
 hostname TOAA_Floor1
 !
+vtp mode client
+vtp domain VINHEALTH
+vtp password VinHealth2024
+!
 no ip domain-lookup
 ip domain-name vinhealth.local
 spanning-tree mode rapid-pvst
 !
-vlan 20
- name A-1-STAFF
-vlan 21
- name A-1-PACS-DICOM
-vlan 22
- name A-1-DEVICES
-vlan 23
- name A-1-CCTV
-!
 interface Vlan20
  description MANAGEMENT
- ip address 10.1.10.1 255.255.255.0
+ ip address 10.1.10.2 255.255.255.0
  no shutdown
 !
 ip default-gateway 10.1.10.254
@@ -26,8 +21,7 @@ interface Ethernet1/0
  switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk allowed vlan 20,21,22,23
- switchport trunk native vlan 1
- spanning-tree portfast trunk
+ spanning-tree cost 10
  no shutdown
 !
 ! Uplink Backup
@@ -36,8 +30,7 @@ interface Ethernet1/1
  switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk allowed vlan 20,21,22,23
- switchport trunk native vlan 1
- spanning-tree portfast trunk
+ spanning-tree cost 20
  no shutdown
 !
 interface Ethernet2/0
@@ -53,7 +46,6 @@ interface Ethernet2/1
  switchport mode access
  switchport access vlan 21
  spanning-tree portfast
- spanning-tree bpduguard enable
  no shutdown
 !
 interface Ethernet2/2
@@ -83,11 +75,12 @@ line console 0
 line vty 0 4
  login local
  transport input ssh
+ exec-timeout 10 0
 !
 ip ssh version 2
 crypto key generate rsa modulus 2048
 !
-ntp server 10.100.33.10
+ntp server 10.100.33.1
 logging host 10.100.32.10
 logging trap informational
 snmp-server community VinHealth_RO RO

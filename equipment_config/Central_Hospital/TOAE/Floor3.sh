@@ -10,17 +10,6 @@ vtp mode client
 vtp domain VINHEALTH
 vtp password VinHealth2024
 !
-vlan 112
- name E-3-IT-STAFF
-vlan 113
- name E-3-SERVER-FARM
-vlan 115
- name E-3-CCTV
-vlan 116
- name E-3-MANAGEMENT
-vlan 999
- name E-3-OOB-MGMT
-!
 interface Vlan116
  description MANAGEMENT
  ip address 10.11.70.1 255.255.255.248
@@ -95,7 +84,7 @@ line vty 0 4
 ip ssh version 2
 crypto key generate rsa modulus 2048
 !
-ntp server 10.100.33.10
+ntp server 10.100.33.1
 logging host 10.100.32.10
 logging trap informational
 snmp-server community VinHealth_RO RO

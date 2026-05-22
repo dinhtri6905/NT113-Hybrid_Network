@@ -8,13 +8,6 @@ vtp mode client
 vtp domain VINHEALTH
 vtp password VinHealth2024
 !
-vlan 92
- name E-1-FINANCE-STAFF
-vlan 95
- name E-1-CCTV
-vlan 96
- name E-1-MANAGEMENT
-!
 interface Vlan96
  description MANAGEMENT
  ip address 10.9.60.1 255.255.255.248
@@ -81,7 +74,7 @@ line vty 0 4
 ip ssh version 2
 crypto key generate rsa modulus 2048
 !
-ntp server 10.100.33.10
+ntp server 10.100.33.1
 logging host 10.100.32.10
 logging trap informational
 snmp-server community VinHealth_RO RO
