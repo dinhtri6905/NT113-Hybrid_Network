@@ -908,7 +908,7 @@ interface Vlan10
 !
 ip default-gateway 10.1.0.254
 !
-! [ĐÚNG] Uplink Primary
+! Uplink Primary
 interface Ethernet1/0
  description TRUNK-TO-SWL3_3 [PRIMARY UPLINK]
  switchport trunk encapsulation dot1q
@@ -918,7 +918,7 @@ interface Ethernet1/0
  spanning-tree portfast trunk
  no shutdown
 !
-! [ĐÚNG] Uplink Backup
+! Uplink Backup
 interface Ethernet1/1
  description TRUNK-TO-SWL3_4 [BACKUP UPLINK]
  switchport trunk encapsulation dot1q
@@ -928,7 +928,7 @@ interface Ethernet1/1
  spanning-tree portfast trunk
  no shutdown
 !
-interface Ethernet0/0
+interface Ethernet2/0
  description ACCESS-VLAN10-STAFF
  switchport mode access
  switchport access vlan 10
@@ -936,7 +936,7 @@ interface Ethernet0/0
  spanning-tree bpduguard enable
  no shutdown
 !
-interface Ethernet0/1
+interface Ethernet2/1
  description ACCESS-VLAN11-PATIENT-WIFI
  switchport mode access
  switchport access vlan 11
@@ -944,7 +944,7 @@ interface Ethernet0/1
  spanning-tree bpduguard enable
  no shutdown
 !
-interface Ethernet0/2
+interface Ethernet2/2
  description ACCESS-VLAN12-DEVICES
  switchport mode access
  switchport access vlan 12
@@ -952,7 +952,7 @@ interface Ethernet0/2
  spanning-tree bpduguard enable
  no shutdown
 !
-interface Ethernet0/3
+interface Ethernet2/3
  description ACCESS-VLAN13-CCTV
  switchport mode access
  switchport access vlan 13
@@ -963,6 +963,11 @@ interface Ethernet0/3
 service password-encryption
 enable secret 0 VinHealth@2025!
 username admin privilege 15 secret VinHealth@2025!
+
+service password-encryption
+enable secret nt113-project
+username admin privilege 15 secret nt113-project
+
 line console 0
  login local
  logging synchronous
