@@ -46,6 +46,7 @@ interface Ethernet2/1
  switchport mode access
  switchport access vlan 21
  spanning-tree portfast
+ spanning-tree bpduguard enable
  no shutdown
 !
 interface Ethernet2/2

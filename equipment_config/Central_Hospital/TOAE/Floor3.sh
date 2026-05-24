@@ -28,7 +28,7 @@ interface Ethernet1/0
  no shutdown
 !
 ! Uplink Backup
-interface Ethernet1/1
+interface Ethernet1/1   
  description TRUNK-TO-SWL3_4 [BACKUP UPLINK]
  switchport trunk encapsulation dot1q
  switchport mode trunk
